@@ -7,14 +7,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class JokeServiceService {
 
-  private apiUrl = 'http://localhost:8084/api/jokes';
+  private apiUrl = 'http://localhost:8084/jokes';
   joke = signal<Joke | null>(null);
   jokes = signal<Joke[]>([]);
 
   constructor(private http: HttpClient) { }
 
   getAllJokes() {
-    this.http.get<Joke[]>(this.apiUrl).subscribe((data) => {
+    this.http.get<Joke[]>(`${this.apiUrl}/all`).subscribe((data) => {
       this.jokes.set(data);
     });
   }
@@ -26,7 +26,7 @@ export class JokeServiceService {
   }
 
   createJoke(joke: Joke) {
-    this.http.post<Joke>(this.apiUrl, joke).subscribe((data) => {
+    this.http.post<Joke>(`${this.apiUrl}/create`, joke).subscribe((data) => {
       this.jokes.update((jokes) => [...jokes, data]);
     });
   }
