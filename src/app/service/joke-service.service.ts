@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
-import { Joke } from '../entitie/joke';
+import { Joke } from '../entitie/Joke';
 import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,24 +26,26 @@ export class JokeServiceService {
     });
   }
 
-  createJoke(joke: Joke) {
-    this.http.post<Joke>(`${this.apiUrl}/create`, joke).subscribe((data) => {
-      this.jokes.update((jokes) => [...jokes, data]);
-    });
+  createJoke(joke: Joke): Observable<Joke> {
+    return this.http.post<Joke>(`${this.apiUrl}/create`, joke).pipe(
+      tap((data) => {
+        this.jokes.update((jokes) => [...jokes, data]);
+      })
+    );
   }
 
-  updateJoke(id: number, joke: Joke) {
-    this.http.put<Joke>(`${this.apiUrl}/${id}`, joke).subscribe((data) => {
-      this.jokes.update((jokes) =>
-        jokes.map((j) => (j.id === id ? data : j))
-      );
-    });
+  updateJoke(id: number| undefined, joke: Joke): Observable<Joke> {
+    return this.http.put<Joke>(`${this.apiUrl}/${id}`, joke).pipe(
+      tap((data) => {
+        this.jokes.update((jokes) =>
+          jokes.map((j) => (j.id === id ? data : j))
+        );
+      })
+    );
   }
 
-  deleteJoke(id: number) {
-    this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
-      this.jokes.update((jokes) => jokes.filter((j) => j.id !== id));
-    });
+  deleteJoke(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   getRandomJoke() {

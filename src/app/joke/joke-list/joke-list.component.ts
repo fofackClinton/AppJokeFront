@@ -1,4 +1,4 @@
-import { Joke } from './../../entitie/joke';
+import { Joke } from '../../entitie/Joke';
 import { Component, effect, inject, OnInit } from '@angular/core';
 import { JokeServiceService } from '../../service/joke-service.service';
 import { Router } from '@angular/router';
@@ -28,11 +28,31 @@ export class JokeListComponent implements OnInit {
 
   getAllJokes(): void {
     this.jokeService.getAllJokes();
+    console.log('Fetched jokes:', this.jokesList);
   }
 
-  goToJokeDetails(id: number): void {
+  goToJokeDetails(id: any): void {
     this.router.navigate(['/joke', id]);
   }
 
+  deleteJoke(id: any): void {
+    this.jokeService.deleteJoke(id).subscribe({
+      next: () => {
+        console.log('Joke deleted successfully');
+        this.router.navigate(['/jokes']);
+      },
+      error: (err) => {
+        console.error('Error deleting joke:', err);
+      }
+    });
+  }
+
+  goToAddJoke(): void {
+    this.router.navigate(['/joke-create']);
+  }
+
+  goToEditJoke(id: any): void {
+    this.router.navigate(['/joke-edit', id]);
+  }
 
 }

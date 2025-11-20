@@ -1,5 +1,8 @@
+import { Category } from "./Category";
+
 export interface Joke {
   id?: number;
-  jokeQuestion: string;
+  jokeContent: string;
   jokeAnswer: string;
+  category: Category;
 }

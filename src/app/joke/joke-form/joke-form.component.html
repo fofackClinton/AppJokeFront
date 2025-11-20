@@ -1,1 +1,53 @@
-<p>joke-form works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <legend>Disabled fieldset example</legend>
+
+  <div class="mb-3">
+    <label class="form-label">Question</label>
+    <input type="text" id="jokeQuestion" class="form-control" formControlName="jokeQuestion" />
+  </div>
+
+  @if (form.get('jokeQuestion')?.invalid && (form.get('jokeQuestion')?.dirty || form.get('jokeQuestion')?.touched)) {
+    <div class="alert alert-danger">
+      @if (form.get('jokeQuestion')?.errors?.['required']) {
+        <div>la question est obligatoire.</div>
+      }
+      @if (form.get('jokeQuestion')?.errors?.['minlength']) {
+        <div>la question doit comporter au moins 10 caractères.</div>
+      }
+      @if (form.get('jokeQuestion')?.errors?.['maxlength']) {
+        <div>la question ne peut pas dépasser 200 caractères.</div>
+      }
+      @if (form.get('jokeQuestion')?.errors?.['pattern']) {
+        <div>la question doit se terminer par un point d'interrogation.</div>
+      }
+    </div>
+  }
+
+  <div class="mb-3">
+    <label class="form-label">Réponse</label>
+    <input type="text" id="jokeAnswer" class="form-control" formControlName="jokeAnswer" />
+  </div>
+
+  @if (form.get('jokeAnswer')?.invalid && (form.get('jokeAnswer')?.dirty || form.get('jokeAnswer')?.touched)) {
+    <div class="alert alert-danger">
+      @if (form.get('jokeAnswer')?.errors?.['required']) {
+        <div>la réponse est obligatoire.</div>
+      }
+      @if (form.get('jokeAnswer')?.errors?.['minlength']) {
+        <div>la réponse doit comporter au moins 10 caractères.</div>
+      }
+      @if (form.get('jokeAnswer')?.errors?.['maxlength']) {
+        <div>la réponse ne peut pas dépasser 200 caractères.</div>
+      }
+      @if (form.get('jokeAnswer')?.errors?.['pattern']) {
+        <div>la réponse doit se terminer par un point.</div>
+      }
+    </div>
+  }
+
+  @if (joke) {
+    <button type="submit" [disabled]="form.invalid" class="btn btn-warning">Modifier</button>
+  } @else {
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+  }
+</form>
