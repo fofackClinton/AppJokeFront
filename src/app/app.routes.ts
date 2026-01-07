@@ -4,6 +4,7 @@ import { JokeDetailComponent } from './joke/joke-detail/joke-detail.component';
 import { JokeFormComponent } from './joke/joke-form/joke-form.component';
 import { JokeUpdateComponent } from './joke/joke-update/joke-update.component';
 import { JokeCreateComponent } from './joke/joke-create/joke-create.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const routes: Routes = [{
   path: 'jokes',
@@ -14,7 +15,7 @@ export const routes: Routes = [{
   component: JokeUpdateComponent
 },
 {
-  path: 'joke/:id',
+  path: 'jokes/detail/:id',
   component: JokeDetailComponent
 },
 {
@@ -22,7 +23,13 @@ export const routes: Routes = [{
   component: JokeCreateComponent
 },
 {
+  path: '',
+  redirectTo: '/jokes',
+  pathMatch: 'full'
+},
+{
   path: '**',
-  redirectTo: 'jokes'
+  component: PageNotFoundComponent,
+  title: 'Page Not Found'
 },
 ];

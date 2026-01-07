@@ -48,6 +48,6 @@
   @if (joke) {
     <button type="submit" [disabled]="form.invalid" class="btn btn-warning">Modifier</button>
   } @else {
-    <button type="submit" class="btn btn-primary">Ajouter</button>
+    <button type="submit" [disabled]="form.invalid" class="btn btn-primary">Ajouter</button>
   }
 </form>

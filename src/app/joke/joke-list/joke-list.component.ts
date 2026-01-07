@@ -1,24 +1,25 @@
 import { Joke } from '../../entitie/Joke';
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { JokeServiceService } from '../../service/joke-service.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-joke-list',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './joke-list.component.html',
   styleUrl: './joke-list.component.css'
 })
 export class JokeListComponent implements OnInit {
 
-  jokesList: Joke[] | undefined = [];
+  jokesList = signal<Joke[]>([]);
 
   private router = inject(Router);
+  private jokeService = inject(JokeServiceService);
 
-  constructor(private jokeService: JokeServiceService) {
+  constructor() {
     effect(() => {
       const jokes = this.jokeService.jokes();
-      this.jokesList = jokes;
+      this.jokesList.set(jokes);
     });
   }
 
@@ -39,7 +40,7 @@ export class JokeListComponent implements OnInit {
     this.jokeService.deleteJoke(id).subscribe({
       next: () => {
         console.log('Joke deleted successfully');
-        this.router.navigate(['/jokes']);
+        this.getAllJokes();
       },
       error: (err) => {
         console.error('Error deleting joke:', err);

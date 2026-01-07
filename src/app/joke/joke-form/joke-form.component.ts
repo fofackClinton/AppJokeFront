@@ -57,7 +57,6 @@ export class JokeFormComponent implements OnInit {
       console.log('Joke added:', this.formData);
       this.router.navigate(['/jokes']);
     });
-
   }
 
   updateJoke(): void {
