@@ -1,7 +1,9 @@
 import { Joke } from '../../entitie/Joke';
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { JokeServiceService } from '../../service/joke-service.service';
 import { Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-joke-list',
@@ -9,27 +11,24 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './joke-list.component.html',
   styleUrl: './joke-list.component.css'
 })
-export class JokeListComponent implements OnInit {
+export class JokeListComponent {
 
-  jokesList = signal<Joke[]>([]);
-
+  jokesList = signal<{values: Joke[], loaded: boolean, error?: any}>({values: [], loaded: true});
   private router = inject(Router);
   private jokeService = inject(JokeServiceService);
 
   constructor() {
-    effect(() => {
-      const jokes = this.jokeService.jokes();
-      this.jokesList.set(jokes);
-    });
-  }
-
-  ngOnInit(): void {
     this.getAllJokes();
   }
 
   getAllJokes(): void {
-    this.jokeService.getAllJokes();
-    console.log('Fetched jokes:', this.jokesList);
+    this.jokeService.getAllJokes().subscribe({
+      next: () => {
+        this.jokesList.set({values: this.jokeService.jokes(), loaded: false});
+      },
+      error: (error) => {
+        this.jokesList.set({values: [], loaded: false, error: error});
+    }});
   }
 
   goToJokeDetails(id: any): void {

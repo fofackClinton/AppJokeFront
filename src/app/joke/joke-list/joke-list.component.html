@@ -1,7 +1,20 @@
+@if(jokesList().loaded) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+} @else if (jokesList().error) {
+<div class="alert alert-danger">
+  Error loading jokes: {{ jokesList().error }}
+</div>
+} @else {
 <div>
   <h2>Joke List</h2>
-</div >
-<div ><button class="btn btn-success" (click)="goToAddJoke()">Add Joke</button></div>
+</div>
+<div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-success" (click)="goToAddJoke()">Add Joke</button>
+</div>
 <table class="table">
   <thead>
     <tr>
@@ -12,17 +25,34 @@
     </tr>
   </thead>
   <tbody>
-    @for (joke of jokesList(); track $index) {
+    @for (joke of jokesList().values; track $index) {
     <tr>
       <th scope="row">{{ $index + 1 }}</th>
       <td>{{ joke?.jokeContent }}</td>
       <td>{{ joke?.jokeAnswer }}</td>
       <td>
-        <button class="btn btn-danger btn-sm me-2" (click)="deleteJoke(joke.id)">Delete</button>
-        <button class="btn btn-primary btn-sm me-2" (click)="goToEditJoke(joke.id)">Edit</button>
-        <button class="btn btn-primary btn-sm" [routerLink]="['/jokes/detail', joke.id]">details</button>
+        <button
+          class="btn btn-danger btn-sm me-2"
+          (click)="deleteJoke(joke.id)"
+        >
+          Delete
+        </button>
+        <button
+          class="btn btn-primary btn-sm me-2"
+          (click)="goToEditJoke(joke.id)"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-primary btn-sm"
+          [routerLink]="['/jokes/detail', joke.id]"
+        >
+          details
+        </button>
       </td>
     </tr>
     }
   </tbody>
 </table>
+
+}

@@ -14,10 +14,12 @@ export class JokeServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getAllJokes() {
-    this.http.get<Joke[]>(`${this.apiUrl}/all`).subscribe((data) => {
-      this.jokes.set(data);
-    });
+  getAllJokes(): Observable<Joke[]> {
+    return this.http.get<Joke[]>(`${this.apiUrl}/all`).pipe(
+      tap((data) => {
+        this.jokes.set(data);
+      })
+    );
   }
 
   getJokeById(id: number) {

@@ -4,11 +4,12 @@ import { Joke } from '../../entitie/Joke';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JokeServiceService } from '../../service/joke-service.service';
 import { effect } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-joke-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, JsonPipe],
   templateUrl: './joke-form.component.html',
   styleUrl: './joke-form.component.css'
 })
@@ -41,14 +42,12 @@ export class JokeFormComponent implements OnInit {
   }
 
   intForm(): void {
-    if (this.form.valid) {
       this.formData = {
         id: this.joke ? this.joke.id : undefined,
         jokeContent: this.form.value.jokeQuestion,
         jokeAnswer: this.form.value.jokeAnswer,
         category: { id: 92, categoryName: 'General' } // Example category
       };
-    }
   }
 
   createJoke(): void {
